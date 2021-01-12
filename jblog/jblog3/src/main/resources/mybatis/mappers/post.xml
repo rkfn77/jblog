@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="post">
+
+<insert id="createNewPost" parameterType="postVo">
+<![CDATA[
+insert into post 
+values(null, #{title }, #{contents }, now(), #{categoryNo });
+]]>
+</insert>
+
+<select id="getCountPost" parameterType="categoryVo" resultType="long">
+<![CDATA[
+select count(no) as noOfPostPerCategory
+from post
+where category_no = #{no };
+]]>
+</select>
+
+<select id='getPostList' parameterType='string' resultType='postVo'>
+<![CDATA[
+select distinct p.no, p.title, p.contents, p.reg_date, p.category_no as categoryNo
+from post p join category c
+on c.id = #{id }
+where p.category_no = c.no
+order by p.reg_date;
+]]>
+</select>
+
+<select id='searchPost' parameterType="string" resultType='postCategoryVo'>
+	<![CDATA[
+	select distinct p.no, p.title, p.contents, p.reg_date as regDate, p.category_no as categoryNo, ca.id as id
+	from post p, category ca
+	where p.category_no = ca.no and
+    (p.title REGEXP #{_keyword }
+	or p.contents REGEXP #{_keyword }
+	)
+	order by p.reg_date desc;
+	]]>
+</select>
+
+<delete id='deleteEveryPostInCategory' parameterType="string">
+	<![CDATA[
+	DELETE FROM post WHERE category_no = #{catNo };
+	]]>
+</delete>
+
+<select id='getPostfromPosNo' parameterType="string" resultType='postVo'>
+	<![CDATA[
+	select no, title, contents, reg_date as regDate, category_no as CategoryNo
+	from post
+	where no = #{posNo };
+	]]>
+</select>
+
+
+</mapper>

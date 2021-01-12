@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="post">
+	<insert id="insertPost" parameterType="postVo">
+		<![CDATA[
+		insert into post 
+		values(null, #{title }, #{contents }, now(), #{categoryNo })
+		]]>
+	</insert>
+	
+	<select id='getPostList' parameterType='string' resultType='postVo'>
+		<![CDATA[
+		select distinct p.no, p.title, p.contents, p.reg_date, p.category_no as categoryNo
+		from post p join category c
+		where c.id = #{id }
+		]]>	
+	</select>
+
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="category">
+
+<insert id="insertCategory" parameterType="categoryVo">
+<![CDATA[
+insert into category 
+values(null, #{name }, #{desc }, now(), #{id })
+]]>
+</insert>
+
+
+<select id='getCategoryList' parameterType='string' resultType='categoryVo'>
+<![CDATA[
+select no, name, 'desc'
+from category 
+where id = #{id }
+order by reg_date desc
+]]>
+</select>
+
+<select id='searchCategory' parameterType="string" resultType='categoryVo'>
+	<![CDATA[
+	select no, name, 'desc', reg_date as regDate, id
+	from category
+	where 
+	(category.name REGEXP #{_keyword }
+	or category.desc REGEXP #{_keyword }
+	)
+	order by reg_date desc
+	]]>
+</select>
+
+<delete id='deleteCategorybyCatNo' parameterType="string">
+	<![CDATA[
+	DELETE FROM category WHERE no = #{catNo };
+	]]>
+</delete>
+
+<select id='getCategoryfromCatNo' parameterType="string" resultType='categoryVo'>
+	<![CDATA[
+	select no, name, 'desc', reg_date as regDate, id
+	from category
+	where no = #{catNo };
+	]]>
+</select>
+
+
+
+</mapper>
